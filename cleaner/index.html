@@ -93,7 +93,7 @@
 		propName=jQuery('#module').val().replace(/Management/,'');
 		debugger;
 		str=jQuery('#inputText').html()||"";
-		str=str.replace(/<div>(.+?)<\/div>/g,function(a,b){return b+"<br>"}).replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/<figure>(.+?)<\/figure>/g,'$1');
+		str=str.replace(/<div>(.+?)<\/div>/g,function(a,b){return b+"<br>"}).replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/<figure>(.+?)<\/figure>/g,'$1').replace(/&gt;\s*&lt;/g,"");
 		//str=str.replace(/<mark>(.+?)<\/mark>/g,function(a,b){return b});
 		iStr=str.replace(/&lt;\s*spring.+?=\s*"\s*(.+?)\s*"\s*\/&gt;/igm,function(m){return '<mark>'+m+'</mark>'});/*to highlight spring left Pane*/
 		oStr=str.replace(/&lt;\s*spring.+?=\s*(["|'])\s*(.+?)\s*(["|'])\s*\/&gt;/igm,function(m,b,c,d){return "<mark>${messageContent["+b+c+d+"]}</mark>"});/*to highlight/convert ${message} Right Pane*/
@@ -106,15 +106,20 @@
 		oStr=oStr.replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");
 		
 		/* code for localization*/		
-		iStr=iStr.replace(/&lt;(button|label|span|div)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s]+?)&lt;?\/(button|label|span|div)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
-		oStr=oStr.replace(/&lt;(button|label|span|div)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s]+?)&lt;\/(button|label|span|div)&gt;/g,function(m,a,b,c,d){
-	
+		iStr=iStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s,\-]+?)&lt;?\/(button|label|span|div|a|p)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
+		iStr=iStr.replace(/&gt;([\w,\s,\',\",\.,(,),\_,\-,\=]+?)&lt;/g,'&gt;<figure>$1</figure>&lt;')
+		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
 			c=c.trim();
 			(leftStr.indexOf(c)<0)&& leftStr.push(c);
 			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
 			(rightStr.indexOf(c)<0)&& rightStr.push(c);
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
+		oStr=oStr.replace(/&gt;([\w,\s,\',\",\.,(,),\_,\-,\=]+?)&lt;/g,function(m,a){
+		a=a.trim();
+		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
+		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}</figure>&lt;"
+		})
 		
 		var leftStr1=leftStr.map(function(v,i){
 		debugger;
