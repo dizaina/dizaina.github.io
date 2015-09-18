@@ -44,7 +44,7 @@
 	</head>
 	<body>
 
-		<header>Inline Script Cleanup !! <div class="toolbar"><div class="fileBrowse"><a href="javascript:void(0)">Upload JSP</a><input type="file" id="fileread"/></div><a onclick="jspReady()" href="javascript:void(0)">JSP</a><a onclick="jsReady()" href="javascript:void(0)">JS</a><a onclick="prReady()" href="javascript:void(0)">Prop</a></div><div class="fileDesc hide">Desc</div><a class="downloader hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a><a class="downloader2 hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a></header>
+		<header>Appviewx JSP Cleanup !! <div class="toolbar"><div class="fileBrowse"><a href="javascript:void(0)">Upload JSP</a><input type="file" id="fileread"/></div><a onclick="jspReady()" href="javascript:void(0)">JSP</a><a onclick="jsReady()" href="javascript:void(0)">JS</a><a onclick="prReady()" href="javascript:void(0)">Prop</a></div><div class="fileDesc hide">Desc</div><a class="downloader hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a><a class="downloader2 hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a></header>
 		
 		<article class="clearfix">
 			<div class="tabular">
@@ -106,8 +106,9 @@
 		oStr=oStr.replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");
 		
 		/* code for localization*/		
-		iStr=iStr.replace(/&lt;(button|label|span|div)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s]+?)&lt;\/(button|label|span|div)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
+		iStr=iStr.replace(/&lt;(button|label|span|div)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s]+?)&lt;?\/(button|label|span|div)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
 		oStr=oStr.replace(/&lt;(button|label|span|div)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s]+?)&lt;\/(button|label|span|div)&gt;/g,function(m,a,b,c,d){
+	
 			c=c.trim();
 			(leftStr.indexOf(c)<0)&& leftStr.push(c);
 			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
@@ -115,12 +116,15 @@
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
 		
-		leftStr=leftStr.map(function(v,i){
+		var leftStr1=leftStr.map(function(v,i){
+		debugger;
 		return propName+"."+rightStr[i].trim()+"="+leftStr[i].trim();
 		});
 		
-		jQuery('#properties').html(leftStr.join('<br>'));
+		jQuery('#properties').html(leftStr1.join('<br>'));
 		/*end of code for localization*/	
+		if(!(/\/\/breakit/igm).test(oStr))
+		alert("Found No '//breakit' comment inside <script/> tag, so external JS file will not be created")
 		
 		if(!(/prefix="c"/g).test(oStr))
 			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'<mark>&lt;%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %&gt;</mark><br>&lt;appviewx:layoutAjax/&gt;')/*To include appviewx.tld*/
@@ -150,8 +154,8 @@
 				jQuery('#inputJS').html(oScriptr);
 				
 				/*to convert all messageContent,pageContent,shiro,dollar to content.obj*/
-				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'content_'+e});
-				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'content_'+e});
+				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'messageContent_'+e});
+				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
 				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
 				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
 				var scriptVar=getMatches(oScriptr,/&lt;%(.*)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_')});
@@ -210,7 +214,7 @@
 				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'</mark>'});;
 				
 				/*to convert dollar inside script*/
-				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{([?!message|?!page].*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
+				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
 				
 				/*to convert shiro inside script*/
 				oScriptr=oScriptr.replace(/['|"]?<mark>&lt;shiro:(\w+)\s*.*?\/&gt;<\/mark>['|"]?/g,function(m,a){return "<mark>shiro_"+a+"</mark>"});
@@ -238,8 +242,8 @@
 				jQuery('#inputJS').html(oScriptr);
 				
 				/*to convert all messageContent,pageContent,shiro,dollar to content.obj*/
-				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'content_'+e});
-				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'content_'+e});
+				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'messageContent_'+e});
+				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
 				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
 				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
 				var scriptVar=getMatches(oScriptr,/&lt;%(.*)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_')});
@@ -298,7 +302,7 @@
 				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'</mark>'});;
 				
 				/*to convert dollar inside script*/
-				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{([?!message|?!page].*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
+				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)|(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
 				
 				/*to convert shiro inside script*/
 				oScriptr=oScriptr.replace(/['|"]?<mark>&lt;shiro:(\w+)\s*.*?\/&gt;<\/mark>['|"]?/g,function(m,a){return "<mark>shiro_"+a+"</mark>"});
