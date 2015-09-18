@@ -235,7 +235,7 @@
 				jQuery('#outputJS').html(oScriptr);
 				
 				/*to convert oScriptr to save-able JS file */
-				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n");
+				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");
 				jQuery('.downloader2').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt1),download:jsName+'.txt'});
 				
 				jsName=jsName.replace(/[.]jsp/i,"")||prompt("Enter JS Name");
@@ -324,7 +324,7 @@
 				jQuery('#outputJS').html(oScriptr);
 				
 				/*to convert oScriptr to save-able JS file */
-				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n");
+				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");;
 				jQuery('.downloader2').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt1),download:jsName+'.txt'});
 				
 				jsName=jsName.replace(/[.]jsp/i,"")||prompt("Enter JS Name");
@@ -335,7 +335,7 @@
 		}
 		
 		jQuery('#inputText').html(iStr);
-		convrt=oStr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n");
+		convrt=oStr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");
 		//debugger
 		jQuery('.downloader').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt),download:jsName+'.jsp'});
 		jQuery('#outputText').html(oStr);
