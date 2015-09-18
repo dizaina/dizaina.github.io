@@ -161,7 +161,7 @@
 				
 				iScriptr=scriptr.match(/.*\/\/(breakIt)/i)[0].replace(/\/\/breakIt/i,"");/*to split before 'breakIt'*/
 				oScriptr=scriptr.match(/\/\/(breakIt).*/i)[0].replace(/\/\/breakIt/i,"");/*to split after 'breakIt' and remove 'breakit'*/
-				oScriptr=oScriptr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>").replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>").replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>")
+				oScriptr=oScriptr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>").replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>").replace(/(&lt;%=.*?%&gt;)/g,"<mark>$1</mark>")
 				
 				jQuery('#inputJS').html(oScriptr);
 				
@@ -170,7 +170,7 @@
 				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
 				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
 				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
-				var scriptVar=getMatches(oScriptr,/&lt;%(.*)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_')});
+				var scriptVar=getMatches(oScriptr,/&lt;%=(.+?)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_').replace(/\(\)/,"")});
 				
 				/*to assign messageContent to content.property*/
 				if(jsVar.length>0){
@@ -204,7 +204,8 @@
 					shiroVar="var "+shiroVar;
 				}
 				if(scriptVar.length>0){
-					var mesVar4=oScriptr.match(/&lt;%(.*?)%&gt;/g);
+					debugger;
+					var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
 					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
 					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
 					scriptVar=scriptVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
@@ -223,7 +224,7 @@
 				})
 				
 				/*to convert scriplet inside script*/
-				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'</mark>'});;
+				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%=(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'+\"</mark>'});;
 				
 				/*to convert dollar inside script*/
 				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
@@ -259,7 +260,7 @@
 				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
 				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
 				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
-				var scriptVar=getMatches(oScriptr,/&lt;%(.*)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_')});
+				var scriptVar=getMatches(oScriptr,/&lt;%=(.+?)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_').replace(/\(\)/,"")});
 				
 				/*to assign messageContent to content.property*/
 				if(jsVar.length>0){
@@ -293,7 +294,7 @@
 					shiroVar="var "+shiroVar;
 				}
 				if(scriptVar.length>0){
-					var mesVar4=oScriptr.match(/&lt;%(.*?)%&gt;/g);
+					var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
 					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
 					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
 					scriptVar=scriptVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
@@ -312,7 +313,7 @@
 				})
 				
 				/*to convert scriplet inside script*/
-				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'</mark>'});;
+				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%=(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'+\"</mark>'});;
 				
 				/*to convert dollar inside script*/
 				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)|(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
