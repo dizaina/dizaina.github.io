@@ -107,27 +107,26 @@
 		oStr=oStr.replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");*/
 		
 		/* code for localization*/		
-		iStr=iStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s,\-]+?)&lt;?\/(button|label|span|div|a|p)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
-		iStr=iStr.replace(/&gt;([\w,\s,\',\",\.,(,),\_,\-,\=]+?)&lt;/g,'&gt;<figure>$1</figure>&lt;');/*for text inside*/
+		iStr=iStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;?\/(button|label|span|div|a|p)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
+		iStr=iStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:,\&amp;]+?)&lt;/g,'&gt;<figure>$1</figure>&lt;');/*for text inside*/
 		
-		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;([\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
+		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
 			c=c.trim();
 			(leftStr.indexOf(c)<0)&& leftStr.push(c);
-			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
+			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
 			(rightStr.indexOf(c)<0)&& rightStr.push(c);
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
-		
-		oStr=oStr.replace(/&gt;([\w,\s,\',\",\.,(,),\_,\-,\=]+?)&lt;/g,function(m,a){
+
+		oStr=oStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:,\&amp;]+?)&lt;/g,function(m,a){
 		a=a.trim();
 		(leftStr.indexOf(a)<0)&& leftStr.push(a)
-		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
+		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
 		(rightStr.indexOf(a)<0)&& rightStr.push(a);
 		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}</figure>&lt;"
 		})
 		
 		var leftStr1=leftStr.map(function(v,i){
-		debugger;
 		return propName+"."+rightStr[i].trim()+"="+leftStr[i].trim();
 		});
 		
@@ -190,7 +189,7 @@
 				if(dollarVar.length>0){
 					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
 					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
-					debugger;
+
 					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
 					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
 					dollarVar=dollarVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
@@ -204,8 +203,7 @@
 					shiroVar="var "+shiroVar;
 				}
 				if(scriptVar.length>0){
-					debugger;
-					var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
+								var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
 					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
 					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
 					scriptVar=scriptVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
@@ -280,7 +278,7 @@
 				if(dollarVar.length>0){
 					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
 					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
-					debugger;
+		
 					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
 					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
 					dollarVar=dollarVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
@@ -372,7 +370,7 @@ function getMatches(string, regex, index) {
       var r = new FileReader();
       r.onload = function(e) { 
 	      var contents = e.target.result;
-		  jQuery('#inputText').html(contents.replace(/\</g,'&lt;').replace(/\>/g,'&gt;').replace(/[\r]/g,'').replace(/[\n]/g,'<br>'));
+		  jQuery('#inputText').html(contents.replace(/\</g,'&lt;').replace(/\>/g,'&gt;').replace(/[\r]/g,'').replace(/[\n]/g,'<br>').replace(/\&/,'&amp;'));
 		  jQuery('.fileDesc').html('Got the file <b>'+f.name+'</b> of size <b>'+(f.size/1024).toFixed(2)+'KB </b>').removeClass('hide');
 		  jsName=f.name.replace(/[.]jsp/i,"");
 		  jQuery('.popup,.overlay').removeClass('hide');
