@@ -108,7 +108,7 @@
 		
 		/* code for localization*/		
 		iStr=iStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;?\/(button|label|span|div|a|p)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
-		iStr=iStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:,\&amp;]+?)&lt;/g,'&gt;<figure>$1</figure>&lt;');/*for text inside*/
+		iStr=iStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:]+?)&lt;/g,'&gt;<figure>$1</figure>&lt;');/*for text inside*/
 		
 		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
 			c=c.trim();
@@ -118,7 +118,7 @@
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
 
-		oStr=oStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:,\&amp;]+?)&lt;/g,function(m,a){
+		oStr=oStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:]+?)&lt;/g,function(m,a){
 		a=a.trim();
 		(leftStr.indexOf(a)<0)&& leftStr.push(a)
 		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
