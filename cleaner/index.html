@@ -370,7 +370,9 @@ function getMatches(string, regex, index) {
       var r = new FileReader();
       r.onload = function(e) { 
 	      var contents = e.target.result;
-		  jQuery('#inputText').html(contents.replace(/\</g,'&lt;').replace(/\>/g,'&gt;').replace(/[\r]/g,'').replace(/[\n]/g,'<br>').replace(/\&/,'&amp;'));
+		  contents=contents.replace(/\&/g,'&amp;').replace(/\</g,'&lt;').replace(/\>/g,'&gt;').replace(/[\r]/g,'').replace(/[\n]/g,'<br>')
+		  jQuery('#inputText').html(contents);
+		
 		  jQuery('.fileDesc').html('Got the file <b>'+f.name+'</b> of size <b>'+(f.size/1024).toFixed(2)+'KB </b>').removeClass('hide');
 		  jsName=f.name.replace(/[.]jsp/i,"");
 		  jQuery('.popup,.overlay').removeClass('hide');
