@@ -91,7 +91,6 @@
 		var str,iStr,oStr,scriptr,iScriptr,oScriptr,jsName,pVar,convrt,propName="XXXXX",leftStr=[],rightStr=[];		
 		function convertor(){
 		propName=jQuery('#module').val().replace(/Management/,'');
-		debugger;
 		str=jQuery('#inputText').html()||"";
 		str=str.replace(/<div>(.+?)<\/div>/g,function(a,b){return b+"<br>"}).replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/<figure>(.+?)<\/figure>/g,'$1').replace(/&gt;\s*&lt;/g,"&gt;&lt;").replace(/&lt;\%@taglib.+prefix=["|']spring["|']\s*%&gt;/g,"<br>");
 		//str=str.replace(/<mark>(.+?)<\/mark>/g,function(a,b){return b});
@@ -113,21 +112,25 @@
 		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
 			c=c.trim();
 			(leftStr.indexOf(c)<0)&& leftStr.push(c);
-			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
+			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"");
 			(rightStr.indexOf(c)<0)&& rightStr.push(c);
+			c=c.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
 
 		oStr=oStr.replace(/&gt;((?!\d+)[\w,\s,\',\",\.,(,),\_,\-,\=,\:]+?)&lt;/g,function(m,a){
 		a=a.trim();
-		(leftStr.indexOf(a)<0)&& leftStr.push(a)
-		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\s+./g,function(m){return m.trim().toUpperCase()}).replace(/./,function(m){return m.toLowerCase()});
+		(leftStr.indexOf(a)<0)&& leftStr.push(a);
+		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"");
 		(rightStr.indexOf(a)<0)&& rightStr.push(a);
+		a=a.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
 		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}</figure>&lt;"
 		})
 		
 		var leftStr1=leftStr.map(function(v,i){
-		return propName+"."+rightStr[i].trim()+"="+leftStr[i].trim();
+		var x=rightStr[i].trim().toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()});
+		debugger;
+		return propName+"."+x+"="+leftStr[i].trim();
 		});
 		
 		jQuery('#properties').html(leftStr1.join('<br>'));
@@ -233,7 +236,7 @@
 				jQuery('#outputJS').html(oScriptr);
 				
 				/*to convert oScriptr to save-able JS file */
-				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");
+				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&nbsp;/g," ").replace(/&amp;/g,"&");
 				jQuery('.downloader2').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt1),download:jsName+'.txt'});
 				
 				jsName=jsName.replace(/[.]jsp/i,"")||prompt("Enter JS Name");
@@ -333,7 +336,7 @@
 		}
 		
 		jQuery('#inputText').html(iStr);
-		convrt=oStr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");
+		convrt=oStr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&nbsp;/g," ").replace(/&amp;/g,"&");
 		//debugger
 		jQuery('.downloader').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt),download:jsName+'.jsp'});
 		jQuery('#outputText').html(oStr);
