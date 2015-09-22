@@ -181,38 +181,32 @@
 					var mesVar=oScriptr.match(/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
 					jsVar=jsVar.map(function(v,i){ return v+"="+"\""+mesVar[i]+"\""});
 					jsVar=jsVar.filter(function(item, pos) {return jsVar.indexOf(item) == pos;});
-					jsVar=jsVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					jsVar="var "+jsVar;
+					jsVar="<br>var "+jsVar.join(";<br>var ")+";";
 				}
 				if(jsPageVar.length>0){
 					var mesVar1=oScriptr.match(/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
 					jsPageVar=jsPageVar.map(function(v,i){ return v+"="+"\""+mesVar1[i]+"\""});
 					jsPageVar=jsPageVar.filter(function(item, pos) {return jsPageVar.indexOf(item) == pos;});
-					jsPageVar=jsPageVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					jsPageVar="var "+jsPageVar;
+					jsPageVar="<br>var "+jsPageVar.join(";<br>var ")+";";
 				}
 				if(dollarVar.length>0){
 					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
 					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
-
 					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
 					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
-					dollarVar=dollarVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					dollarVar="var "+dollarVar;
+					dollarVar="<br>var "+dollarVar.join(";<br>var ")+";";
 				}
 				if(shiroVar.length>0){
 					var mesVar3=oScriptr.match(/&lt;shiro:(\w+)\s*.*?\/&gt;/g);
 					shiroVar=shiroVar.map(function(v,i){ return v+"="+"\""+mesVar3[i]+"\""});
 					shiroVar=shiroVar.filter(function(item, pos) {return shiroVar.indexOf(item) == pos;});
-					shiroVar=shiroVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					shiroVar="var "+shiroVar;
+					shiroVar="<br>var "+shiroVar.join(";<br>var ")+";";
 				}
 				if(scriptVar.length>0){
 								var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
 					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
 					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
-					scriptVar=scriptVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					scriptVar="var "+scriptVar;
+					scriptVar="<br>var "+scriptVar.join(";<br>var ")+";";
 				}
 				/*to convert messageContent to messageContent_ inside script*/
 				oScriptr=oScriptr.replace(/['|"]?\s*<mark>\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/mark>['|"]?/g,function(a,b){
@@ -270,38 +264,32 @@
 					var mesVar=oScriptr.match(/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
 					jsVar=jsVar.map(function(v,i){ return v+"="+"\""+mesVar[i]+"\""});
 					jsVar=jsVar.filter(function(item, pos) {return jsVar.indexOf(item) == pos;});
-					jsVar=jsVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					jsVar="var "+jsVar;
+					jsVar="<br>var "+jsVar.join(";<br>var ")+";";
 				}
 				if(jsPageVar.length>0){
 					var mesVar1=oScriptr.match(/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
 					jsPageVar=jsPageVar.map(function(v,i){ return v+"="+"\""+mesVar1[i]+"\""});
 					jsPageVar=jsPageVar.filter(function(item, pos) {return jsPageVar.indexOf(item) == pos;});
-					jsPageVar=jsPageVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					jsPageVar="var "+jsPageVar;
+					jsPageVar="<br>var "+jsPageVar.join(";<br>var ")+";";
 				}
 				if(dollarVar.length>0){
 					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
 					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
-		
 					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
 					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
-					dollarVar=dollarVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					dollarVar="var "+dollarVar;
+					dollarVar="<br>var "+dollarVar.join(";<br>var ")+";";
 				}
 				if(shiroVar.length>0){
 					var mesVar3=oScriptr.match(/&lt;shiro:(\w+)\s*.*?\/&gt;/g);
 					shiroVar=shiroVar.map(function(v,i){ return v+"="+"\""+mesVar3[i]+"\""});
 					shiroVar=shiroVar.filter(function(item, pos) {return shiroVar.indexOf(item) == pos;});
-					shiroVar=shiroVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					shiroVar="var "+shiroVar;
+					shiroVar="<br>var "+shiroVar.join(";<br>var ")+";";
 				}
 				if(scriptVar.length>0){
-					var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
+								var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
 					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
 					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
-					scriptVar=scriptVar.map(function(v,i){ return ((i==0)?"":"<br>")+v});
-					scriptVar="var "+scriptVar;
+					scriptVar="<br>var "+scriptVar.join(";<br>var ")+";";
 				}
 				/*to convert messageContent to messageContent_ inside script*/
 				oScriptr=oScriptr.replace(/['|"]?\s*<mark>\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/mark>['|"]?/g,function(a,b){
