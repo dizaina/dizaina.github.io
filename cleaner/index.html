@@ -118,14 +118,14 @@
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
 		});
 		
-		oStr=oStr.replace(/&gt;((?!\d+)(?!\,)[\w,\s,\',\",\.,(,),\_,\-,\=]+?)\:?&lt;/g,function(m,a){
+		oStr=oStr.replace(/&gt;((?!\d+)(?!\,)[\w,\s,\',\",\.,(,),\_,\-,\=]+?)(\:)?&lt;/g,function(m,a,b){
 		a=a.trim();
 		(leftStr.indexOf(a)<0)&& leftStr.push(a);
 		debugger;
 		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"_$");
 		(rightStr.indexOf(a)<0)&& rightStr.push(a);
 		a=a.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
-		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}</figure>&lt;"
+		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}"+b+"</figure>&lt;"
 		})
 		
 		var leftStr1=leftStr.map(function(v,i){
