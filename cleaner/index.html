@@ -112,7 +112,7 @@
 		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
 			c=c.trim();
 			(leftStr.indexOf(c)<0)&& leftStr.push(c);
-			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"");
+			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\-/," ");
 			(rightStr.indexOf(c)<0)&& rightStr.push(c);
 			c=c.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
 			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
@@ -122,7 +122,7 @@
 		a=a.trim();
 		(leftStr.indexOf(a)<0)&& leftStr.push(a);
 		debugger;
-		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"_$");
+		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\-/," ");
 		(rightStr.indexOf(a)<0)&& rightStr.push(a);
 		a=a.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
 		b=b?b:"";
