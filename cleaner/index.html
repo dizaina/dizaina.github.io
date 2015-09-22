@@ -155,12 +155,12 @@
 			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'<mark>&lt;%@taglib uri="../../tlds/appviewx.tld" prefix="appviewx"%&gt;</mark><br>&lt;appviewx:layoutAjax/&gt;')/*To include prefix=fn*/
 	
 		//var pat=(/&lt;script\s*type="text\/javascript"\s*&gt;/).test(oStr)?(/&lt;script\s*type="text\/javascript"\s*&gt;/):(/&lt;script\s*&gt;/)
-		if((/&lt;script\s*type=["|']text\/javascript['|"]\s*&gt;/).test(oStr)){
+		if((/&lt;\s*script\s*type=["|']text\/javascript['|"]\s*&gt;/).test(oStr)){
 			scriptr=oStr.match(/&lt;script\s*type="text\/javascript"\s*&gt;(.+?)&lt;\/script&gt;/);
 			scriptr=scriptr[scriptr.length-1];
 			
 			if((/breakIt/i).test(scriptr)){
-				scriptr=scriptr.replace(/&lt;script\s*type="text\/javascript"\s*&gt;/,"").replace(/&lt;\/script\s*&gt;/,"");/*to remove script tag*/
+				scriptr=scriptr.replace(/&lt;\s*script\s*type="text\/javascript"\s*&gt;/,"").replace(/&lt;\s*\/script\s*&gt;/,"");/*to remove script tag*/
 				
 				iScriptr=scriptr.match(/.*\/\/(breakIt)/i)[0].replace(/\/\/breakIt/i,"");/*to split before 'breakIt'*/
 				oScriptr=scriptr.match(/\/\/(breakIt).*/i)[0].replace(/\/\/breakIt/i,"");/*to split after 'breakIt' and remove 'breakit'*/
@@ -250,7 +250,7 @@
 			scriptr=oStr.match(/&lt;\s*script\s*&gt;(.+?)&lt;\/script&gt;/);
 			scriptr=scriptr[scriptr.length-1];
 			if((/breakIt/i).test(scriptr)){
-				scriptr=scriptr.replace(/&lt;script&gt;/,"").replace(/&lt;\/script\s*&gt;/,"");/*to remove script tag*/
+				scriptr=scriptr.replace(/&lt;\s*script\s*&gt;/,"").replace(/&lt;\s*\/script\s*&gt;/,"");/*to remove script tag*/
 								
 				iScriptr=scriptr.match(/.*\/\/(breakIt)/i)[0].replace(/\/\/breakIt/i,"");/*to split before 'breakIt'*/
 				oScriptr=scriptr.match(/\/\/(breakIt).*/i)[0].replace(/\/\/breakIt/i,"");/*to split after 'breakIt' and remove 'breakit'*/
