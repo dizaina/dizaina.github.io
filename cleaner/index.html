@@ -125,6 +125,7 @@
 		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\:/,"_$");
 		(rightStr.indexOf(a)<0)&& rightStr.push(a);
 		a=a.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
+		b=b?b:"";
 		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}"+b+"</figure>&lt;"
 		})
 		
