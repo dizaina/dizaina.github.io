@@ -1,0 +1,1 @@
+var khut=angular.module('ui.bootstrap.main', ['ui.bootstrap', 'ngTouch']);

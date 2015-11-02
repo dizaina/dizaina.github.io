@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NDA</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<style>
+	body{font-family:Times New Roman;}
+	input[type="text"]{border:solid 1px #000;color:#666;border-radius:5px;padding:5px;width:300px}
+	button{width:100px;padding:5px;color:white;background:#555;border-radius:5px; border:solid thin #222}
+	button:hover{background:blue}
+	.text-right{text-align:right}
+	#canvasSimple{border:solid thin black;margin:15px 0;}
+	.header{position:relative}
+	.header img{ border:0}
+	#img-sign{border:solid thin #ccc;display:none; margin: 10px 0;}
+	#oimg{display:block}
+	.attpoints{padding-left:80px}
+	.amen{text-align:right;font-size:13px;color:#aaa;margin-bottom:20px}
+	.content{padding:15px;}
+	#main-content{width:900px;margin:0 auto;border:solid 3px #222}
+	.heading{text-align:center;text-decoration:underline;font-weight:bold;margin-bottom:25px}
+	.nda,.nda2,.nda3,.nda4{width:625px;margin:0 auto;padding:50px 100px 50px 100px;background-color:white}
+	.nda2 p,.nda3 p{font-size:13px;text-align:justify;margin:5px 0}
+	.nda2 ol,.nda3 ol,.nda3-footer{font-size:13px;text-align:justify}
+	.text-center{text-align:center}
+	.text-justify{text-align:justify}
+	ol.attpoints li{margin-bottom:15px}
+	.footer .label{width:150px}
+	.footer .label-top{margin:15px 0 5px 0;}
+	.bottom-cont{margin-top:80px}
+	.propInfo{text-align:center;font-size:13px;color:#aaa;}
+	.frm-ctrl{margin:10px 0;}
+	.frm-ctrl label{width:185px;display:inline-block}
+	.upload-file{width:105px}
+	ol.uppr-roman{list-style-type: upper-roman;}
+	ol.uppr-roman li{margin-bottom:5px}
+	.hide{display:none}
+	.show{display:block}
+	.showInline{display:inline}
+	.nda3-footer table{width:100%;margin-top:25px}
+	.nda3-footer table td{width:50%}
+	.text-left{text-align:left !important}
+	 span.inputFields{ display: inline-block;text-align: center;border-bottom: solid thin black;font-size:13px}
+	 .nda4{font-family:arial}
+	 .nda4 .box{border:solid thin black;padding:5px;  margin-top: 100px;}
+	 .postop-sign{margin-top:-18px;border:none}
+	 form.userForm { font-family: calibri;}
+	 #genDoc{margin:20px 0;width:210px;padding:10px;background:#FCC203;color:#444}
+	 #genDoc:hover{background:green;color:#fff}
+	 .userForm label{vertical-align:middle}
+	img.signature{border-bottom:solid thin black}
+	.imager{display:block;text-align:center}
+	.nda4-footer{text-align:right;font-size:12px;color:#999;margin-top:100px}
+	.output{padding-top:15px;padding-bottom:15px;background:#eee;border:solid thin #777;border-radius:5px}
+	.overlay{ position: absolute;top: 0;right: 0;left: 0;background-color: white;bottom: 0;  text-align: center;padding-top: 18%;}
+	.download-details{margin:20px;padding:20px;background:#FFECAD;border:solid thin #777;border-radius:5px}
+	a.linker{display:inline-block;margin:5px 0}
+	a.linker img{border:solid thin #777;border-radius:5px}
+	a.linker:hover{border:solid 2px blue;border-radius:5px}
+	.frm-ctrl .label-small{font-size: 12px;color: #444;margin: 5px 0 10px 190px;}
+	  .glogo{position: absolute;top: 56px;right: 15px;width: 120px;}
+	  .main-footer{padding:5px;background:#444;color:#999;text-align:right; font-size: 10px;}
+	  input[type="text"].valid{border: solid 2px green}
+	  input[type="text"].error{border:solid 2px red}
+	  .status{color:red;font-size: 12px;margin: 5px 0 10px 190px;display:none}
+	  input[type="text"].error+.status{display:block;}
+	  .label-small-canvas{display:inline-block;font-size: 12px;color: #444;margin: 5px 0 10px 100px;}
+	</style>
+		<!--[if lte IE 8]>
+<style>
+.content{display:none !important}
+</style>
+<![endif]-->
+</head>
+  <body>
+  <div>
+    <div id="main-content">
+		<div class="header">
+			<img src="images/heeader.jpg" width=900 height=300/>
+			<img src="images/glogo.png"  class="glogo"/>
+		</div>
+	<!--[if lte IE 8]>
+<h1 style="padding:50px;text-align:center">IE8 Not supported,Please use Modern Browsers</h1>
+<![endif]-->
+		<div class="content">
+			<div class="overlay hide"><img src="images/loader.gif"/><h2>LOADING...!</h2></div>
+			<form class="userForm" name="userForm" autocomplete="on" spellcheck="false">
+				<div class="frm-ctrl"><label>Full Name*</label><input placeholder="Full Name" name="username" type='text'/><div class="status">Invalid Name</div><div class="label-small">(* Only Alphabets are Allowed)</div></div>
+				<div class="frm-ctrl"><label>AT&amp;T Id*</label><input placeholder="AT&TID" name="attid" type='text'/><div class="status">Invalid Attid</div><div class="label-small">(* Only 6 Digit AlphaNumerics are Allowed)</div></div>
+				<div class="frm-ctrl"><label>Joined Date*<br><small>(MM/DD/YYYY)</small></label><input placeholder="MM/DD/YYYY" name="date" type='text'/><div class="status">Invalid Date</div><div class="label-small">(* Only "MM/DD/YYYY" are Allowed)</div></div>
+				<div class="frm-ctrl">
+					<label>Signature*<br>(Make Short Signature)</label>
+					<!--button type='button'>browse</button-->
+					<input type="file" class="upload-file hide" value="upload" name="upload"/>
+					<button id="drawCanvas" type='button'>Draw</button>
+					<div class="draw-sign hide">
+						<div id="canvasSimpleDiv"><!--canvas id="canvasSimple" width=600 height=300></canvas--></div>
+						<img id="img-sign" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width=150 height=55/>
+						<button id="clearCanvasSimple" type="button">Clear</button>
+						<button id="doneSignature">Done</button>
+						<div class="label-small-canvas">(* Make Short Signature)</div>
+					</div>
+				</div>
+				
+				<div class="frm-ctrl"><label>Address</label><input name="address" placeholder="Address" type='text'/><div class="label-small">(Office Address)</div></div>
+				<div class="frm-ctrl"><label>Social Security Number</label><input placeholder="Leave the Field Blank" name="ssn" type='text'/><div class="label-small">( Fill the field if you have Social Security Number)</div></div>
+				<div class="frm-ctrl"><label>Agreement No. Between Supplier and AT&amp;T</label><input placeholder="Leave the Field Blank" name="agreement" type='text'/><div class="label-small">( Discuss with PM before you fill the field)</div></div>
+				<div class="frm-ctrl"><label>Agreement Date</label><input placeholder="Leave the Field Blank" name="effectivedate" type='text'/><div class="label-small">( Discuss with PM before you fill the field)</div></div>
+				
+				<div class="frm-ctrl ">
+					<button id="genDoc">Generate Documents</button>
+				</div>
+			</form>
+			<div class="pages hide">
+				<div class="nda">
+					<p class="amen">Amendment No. 03028456-4</p>
+					<p class="heading">Appendix Q - Software/Technology Nondisclosure Agreement</p>
+					<p>I <span class="inputFields username" style="width: 237px;">&nbsp</span>, an employee/contractor (circle appropriate) for Infosys Technologies Limited  (identify the vendor) enter into this nondisclosure agreement with AT&amp;T Services, Inc. (“AT&amp;T”) and agree to be bound by the following:</p>
+					<ol class="attpoints">
+						<li>I have been contracted by AT&amp;T either directly, or through my employer, to perform software development and maintenance for AT&amp;T</li>
+						<li>I understand that under this contract AT&amp;T may provide me access to certain encryption software and technology</li>
+						<li>I understand that AT&amp;T owns the intellectual property rights to any software and technology provided under this contract, as well as any software and technology that may be developed from it, and that my access to and use of it is exclusively for the internal company use of AT&amp;T, including development of new products for AT&amp;T</li>
+						<li>I will not re-export, re-transfer or otherwise disclose to any third party (including my employer) the software and technology provided to me by AT&amp;T without the prior written consent of AT&amp;T, including after the completion of my contractual duties</li>
+						<li>I am not a national (i.e., citizen or lawful permanent resident) of Cuba, Iran, Libya, North Korea, Sudan or Syria</li>
+					</ol>
+					<p>Under the penalties of perjury provided by law, I declare that I have examined this document, and to the best of my knowledge and belief, it is true, correct, and complete.</p>
+					
+					<div class='footer'>
+						<div class="label-top"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="signature" width=150 height=55 alt="your Signature"/></div>
+						<div class="label">Signature</div>
+						<div class="label-top"><span class="username inputFields text-left" style="width: 237px;">&nbsp;</span></div>
+						<div class="label">Printed Name</div>
+						<div class="label-top"><span class="date inputFields text-left" style="width: 150px;">&nbsp;</span></div>
+						<div class="label">Date</div>
+					</div>
+					<div class="bottom-cont">
+						<p class="text-right">&lt;AT&amp;TID&gt;</p>
+						<p class="propInfo"><b>Restricted - Proprietary Information</b><br>The information contained in this Agreement is not for use or disclosure outside<br>AT&amp;T, Supplier, their Affiliates and their third party representatives, except under written Agreement by the contracting Parties.<br>3</p>
+					</div>
+				</div>
+				<div class="nda2">
+					<div><b>Appendix I - Confidentiality and Invention Agreement</b></div>
+					<div class="text-center"><b>CONFIDENTIALITY AND INVENTION AGREEMENT</b></div>
+					<p>This Agreement (“Agreement”) dated <span class="date inputFields" style="width: 110px;">18/6/2015</span> is made by the individual named below (“I” or “me”), who is engaged to perform work at <span class="inputFields" style="width: 212px;">AT&amp;T</span>(“AT&amp;T”), as a worker of <span class="inputFields" style="width: 212px;">Infosys</span>(“Supplier”) under the terms and conditions of the agreement named below, between Supplier and <span class="inputFields" style="width: 151px;">Infosys</span>.<b><i> (Insert party to original agreement (original AT&amp;T Party</i></b></p>
+					<ol class="uppr-roman">
+						<li><p><b>Status</b></p><div>I have been engaged by <span class="inputFields" style="width: 212px;">Infosys</span>to provide services to AT&amp;T Company, its subsidiaries, parent or successor (sometimes referred to as “Company” or “AT&amp;T Company”).  I may be hired by Supplier as a full or part-time employee, a temporary worker, or as an independent contractor.  I understand that no employment relationship between me and the Company is created by this Agreement or by my agreement with the Supplier to provide services to the Supplier or Company.I acknowledge and agree that Supplier shall be solely responsible for all payments to me including payment of compensation, premium payments for overtime, bonuses, and other incentive payments, if any, and payments for vacation, holiday, sick days or other personal days, if any.  Also, I will be solely responsible for negotiating and agreeing with Supplier for participation in any Supplier benefit plans, including any pension, savings, or health and welfare plan.  Unless Company expressly provides otherwise in writing, I further understand and agree that I am not eligible to participate in or receive any benefits under the terms of the Company’s pension plans, savings plans, health plans, vision plans, disability plans, life insurance plans, stock option plans, or any employee benefit plan sponsored by the Company for any period of time.  I understand and agree that the cash payments and benefits which I receive from Supplier shall represent the sole compensation to which I am entitled, and that Supplier will be solely responsible for all matters relating to compliance with all employer tax obligations arising from the performance of Services in connection with this Agreement.  These tax obligations include but are not limited to the obligation to withhold employee taxes under local, state and federal income tax laws, unemployment compensation insurance tax laws, state disability insurance tax laws, social security and Medicare tax laws, and all other payroll tax laws or similar laws.</div></li>
+						<li><p><b>Work Policies and Rules</b></p>
+							<div>
+								<ol>
+									<li>I agree that during the performance of my services I will not violate Company work rules and policies, including but not limited to those specified in the <i>AT&amp;T Code Of Business Conduct.</i></li>
+									<li>I understand that it is my responsibility to ensure that my personal conduct and comments in the workplace support a professional environment which is free of inappropriate behavior, language, joke or actions which could be perceived as sexual harassment or as biased, demeaning, offensive, derogatory to others based upon race, color, religion, national origin, sex, age, sexual orientation, marital status, veteran’s status or disability.  I further agree to refrain from words or conduct that is threatening and/or disrespectful of others</li>
+									<li>If AT&amp;T Company provides me access to its computer systems, I agree (a) to use such systems in a professional manner, (b) to use such systems only for business purposes and solely for the purposes of performing under the agreement named below, (c) to use such systems in compliance with AT&amp;T Company’s applicable standards and guidelines for computer systems use, and (d) to use password devices, if applicable and if requested by AT&amp;T Company.  Without limiting the foregoing, AT&amp;T Company property, including but not limited to Intranet and Internet services, shall not be used for personal purposes or for any purpose which is not directly related to the business which is the subject of the agreement named below.  I acknowledge and agree that I must have a valid AT&amp;T business reason to access the Intranet and/ or the Internet from within AT&amp;T’s Company’s private corporate network.</li>
+								</ol>
+							</div></li>
+						<li><p><b>Information</b></p><div>I agree and understand that the term "Information" means any technical, customer or business information in written, graphical, oral or other tangible or intangible forms, including but not limited to, specifications, records, data, computer programs, tax returns, tax workpapers, drawings, models and secrets which AT&amp;T Company may have in its possession or be legally obligated to keep confidential.  I understand that during the course of my work at AT&amp;T Company, I may have access to Information that belongs to AT&amp;T Company, its customers or other parties, or may be subject to privacy laws and laws regarding secrecy of communications, and that unauthorized disclosure of such Information may be harmful or prejudicial to the interests of AT&amp;T Company. I agree not to disclose, copy, publish, or any way use, directly or indirectly, such Information for my </div></li>
+							
+					</ol>
+				</div>
+				<div class="nda3">
+					<p>purposes or the purposes of others, unless such disclosure or use is expressly authorized in writing by AT&amp;T Company.  I agree to keep such Information in a secure environment to prevent the inadvertent disclosure of such Information to others.  I acknowledge and agree that all such Information remains the exclusive property of AT&amp;T Company and I agree not to remove such Information from AT&amp;T Company’s possession or premises by physical removal or electronic transmission unless I have written authorization from AT&amp;T Company to do so.</p>
+					<ol class="uppr-roman" start=4>
+						<li><p><b>Innovations</b></p>
+							<div>
+								<ol>
+									<li>I understand that during and incident to my work at AT&amp;T Company, I may create inventions, discoveries, improvements, computer or other apparatus programs, and related documentation and other works of authorship ("Innovations"), whether or not patentable, copyrightable, or subject to other forms of legal protection.  I assign to AT&amp;T Company all of my rights, title and interest (including rights in copyright) in and to all Innovations I make, create or develop, either solely or jointly with others, during my work at AT&amp;T Company for which Supplier was paid by AT&amp;T Company for my work or for which I used AT&amp;T Company's materials or facilities.  I agree that the above assignment is binding upon my estate, administrators, or other legal representatives or assigns.</li>
+									<li>I agree to promptly notify AT&amp;T Company of all such Innovations.  Whenever requested by AT&amp;T Company, I shall promptly execute, without additional compensation, any and all instruments which AT&amp;T Company may deem necessary to assign and convey to AT&amp;T Company all of my rights, title and interest in and to all such Innovations.  In addition, I agree to assist AT&amp;T Company in preparing copyright or patent applications and to execute such applications and all documents required to obtain copyrights or patents for such Innovation, all at AT&amp;T Company’s expense including compensation to me at the rates specified in the agreement named below.  I agree that my obligation to execute such instruments shall continue after the expiration of my work with AT&amp;T Company.</li>
+									<li>THIS AGREEMENT DOES NOT APPLY TO  ANY INVENTION MADE IN THE STATE OF KANSAS  FOR WHICH NO EQUIPMENT, SUPPLIES, FACILITIES OR TRADE SECRET INFORMATION OF AT&amp;T COMPANY WAS USED AND WHICH WAS DEVELOPED ENTIRELEY ON MY OWN TIME, UNLESS (1) THE INVENTION RELATES TO THE BUSINESS OF THE AT&amp;T COMPANY OR THE AT&amp;T COMPANY’S ACTUAL OR DEMONSTRABLY ANTICIPATED RESEARCH OR DEVELOPMENT OR (2) THE INVENTION RESULTS FROM ANY WORK PERFORMED BY ME FOR AT&amp;T COMPANY.  THIS AGREEMENT DOES NOT APPLY TO AN INVENTION MADE IN CALIFORNIA WHICH QUALIFIES FULLY UNDER THE PROVISIONS OF CALIFORNIA LABOR CODE SECTION 2870. Section IV, Paragraphs 1 and 2 do not apply to any Innovation which, under the provisions in the Agreement named below, is to be other than the sole and exclusive property of AT&amp;T Company; the title provisions of said agreement apply to any such above Innovation.</li>
+								</ol>
+							</div></li>
+						<li><p><b>Administrative Terms</b></p>
+							<div>
+								<ol>
+									<li>This Agreement shall be effective as of the date executed below, and shall remain in effect notwithstanding my termination of employment with Supplier or termination of my work at AT&amp;T Company</li>
+									<li>In the event that any provision of this Agreement is held to be invalid or unenforceable, then such invalid or enforceable provisions shall be severed, and the remaining provisions shall remain in full force and effect to the fullest extent permitted by law.</li>
+									<li>In the event of any conflict or inconsistency between any provision of this Agreement and any provision of the Software and Professional Services Agreement signed between AT&amp;T and Supplier, the provisions of the Software and Professional Services Agreement shall govern and control.</li>
+								</ol>
+							</div></li>
+					</ol>
+					<p>I have read, understand and agree to abide by this Agreement.</p>
+					<div class="nda3-footer">
+						<table>
+							<tr>
+								<td>By: <span class="inputFields username" style="width:280px">&nbsp;</span></td><td>Date<span class="inputFields date" style="width:285px">&nbsp;</span></td>
+							</tr>
+							<tr>
+								<td>Print Name:<span class="inputFields username" style="width:239px">&nbsp;</span></td><td>Social Security Number<span class="inputFields" style="width:183px">&nbsp;</span></td>
+							</tr>
+							<tr>
+								<td colspan=2>Address:<span class="inputFields address" style="width:578px">&nbsp;</span></td>						
+							</tr>
+							<tr>
+								<td>Agreement No. between Supplier and AT&amp;T:<span class="inputFields agreement" style="width:61px">&nbsp;</span></td><td>Effective Date: <span  class="inputFields effectivedate"  style="width:228px">&nbsp;</span></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class='nda4'>
+					<img src="images/logo.png"/>
+					<h3 class="text-center">Section 272 Compliance Guide <br><br> Acknowledgement Form <br>for<br><u>Temporary Workers and Independent Contractors</u></h3>
+					<br>
+					<p>I have carefully read and reviewed the “The Separate Affiliate Safeguards, Section 272 Compliance Obligations Applicable to InterLATA Services and Manufacturing Under the Federal Telecommunications Act of 1996”, more commonly referred to as the “Section 272 Compliance Guide for Temporary Workers and Independent Contractors". </p>
+					<p>I fully understand the provisions it contains and the requirements imposed by law.  I further understand that violating any of the requirements identified in the Section 272 Employee Compliance Guide may subject me to disciplinary action, up to and including dismissal.</p>
+					<div class='box'>
+						<p>Name(printed) :<span class="inputFields username" style="width:280px">&nbsp;</span></p>
+						<p>Signature:<img class="signature postop-sign" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width=150 height=55/> Date <span class="inputFields date" style="width:280px">&nbsp;</span></p>
+						<p>Temporary Worker/Contractor UUID/HRID: <span class="inputFields attid" style="width:280px">&nbsp;</span></p>
+						<p>Supervisor Name (printed):<span class="inputFields supname" style="width:280px">&nbsp;</span></p>
+						<p>Supervisor Signature<span class="inputFields supsign" style="width:250px"></span>Date <span class="inputFields supdate" style="width:150px">&nbsp;</span></p>
+					</div>
+					<div class="nda4-footer">(Temporary Workers and Independent Contractors Acknowledgement form)</div>
+				</div>
+		</div>
+			<div class="output hide">
+				<div id="mover" class="download-details">Click below Images to Download</div>
+				<div class="imager"><a class="linker" target="_blank" title="Nondisclosure Agreement.png" href="javascript:void(0)"><img id="nda1-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/></a></div>
+				<div class="imager" ><a class="linker" target="_blank"  title="Appendix I - Confidentiality and Invention Agreement-part1.png" href="javascript:void(0)"><img id="nda2-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/></a></div>
+				<div class="imager"><a class="linker" target="_blank"  title="Appendix I - Confidentiality and Invention Agreement-part2.png" href="javascript:void(0)"><img id="nda3-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/></a></div>
+				<div class="imager"><a class="linker" target="_blank"  title="272 compliance guide.png" href="javascript:void(0)"><img id="nda4-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/></a></div>
+			</div>
+		</div>
+		<div class="main-footer">UI:Sathya</div>
+    </div>
+	</div>
+	
+    <script type="text/javascript" src="js/html2canvas.js"></script>
+	 <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	 <script>
+		jQuery('#drawCanvas').click(function(e){
+			e.preventDefault();
+			jQuery('.draw-sign').toggleClass('hide');
+			if(!jQuery('.draw-sign').hasClass('hide'))
+			window.scrollTo(document.getElementById('canvasSimple').offsetLeft,document.getElementById('canvasSimple').offsetTop)
+		})
+		jQuery('#genDoc').click(function(e){
+			e.preventDefault();
+			var uname=document.userForm.username.value;
+			var attid=document.userForm.attid.value;
+			var date=document.userForm.date.value;
+			var address=document.userForm.address.value;
+			var ssn=document.userForm.ssn.value;
+			var agreement=document.userForm.agreement.value;
+			var effectivedate=document.userForm.effectivedate.value;
+			uname?jQuery('span.username').html(jQuery.trim(uname)):alert('User Name Invalid');
+			attid?jQuery('span.attid').html(jQuery.trim(attid)):alert('AT&TID Invalid');
+			date?jQuery('span.date').html(jQuery.trim(date)):alert('Joined Date Invalid');
+			address?jQuery('span.address').html(jQuery.trim(address)):jQuery('span.address').html('&nbsp')
+			ssn?jQuery('span.ssn').html(jQuery.trim(ssn)):jQuery('span.ssn').html('&nbsp');
+			agreement?jQuery('span.agreement').html(jQuery.trim(agreement)):jQuery('span.agreement').html('&nbsp');
+			effectivedate?jQuery('span.effectivedate').html(jQuery.trim(effectivedate)):jQuery('span.effectivedate').html('&nbsp');
+			jQuery('img.signature').attr('src',jQuery('#img-sign').attr('src'));
+			jQuery('.content').css('position','relative');
+			jQuery('.overlay').removeClass('hide');
+			screenshot();
+		})
+		function screenshot(){
+			jQuery('.pages').removeClass('hide');
+			html2canvas(jQuery('.nda'),{background:'#fff'}).then(function(canvas) {
+				jQuery('#nda1-img').parent().attr('href',canvas.toDataURL())
+				jQuery('#nda1-img').attr('src',canvas.toDataURL());
+			});
+			html2canvas(jQuery('.nda2'),{background:'#fff'}).then(function(canvas) {
+				jQuery('#nda2-img').parent().attr('href',canvas.toDataURL())
+				jQuery('#nda2-img').attr('src',canvas.toDataURL());
+			});
+			html2canvas(jQuery('.nda3'),{background:'#fff'}).then(function(canvas) {
+				jQuery('#nda3-img').parent().attr('href',canvas.toDataURL())
+				jQuery('#nda3-img').attr('src',canvas.toDataURL());
+			});
+			html2canvas(jQuery('.nda4'),{background:'#fff'}).then(function(canvas) {
+				jQuery('#nda4-img').parent().attr('href',canvas.toDataURL())
+				jQuery('#nda4-img').attr('src',canvas.toDataURL());
+				jQuery('.output').removeClass('hide');
+				jQuery('.pages').addClass('hide');
+				jQuery('.overlay').addClass('hide');
+				jQuery('.content').css('position','static');
+				window.scrollTo(document.getElementById('mover').offsetLeft,document.getElementById('mover').offsetTop)
+			});
+		
+		}
+	</script>
+	<script>
+	
+/****************************************************************************** Simple Canvas */
+
+var clickX_simple = new Array();
+var clickY_simple = new Array();
+var clickDrag_simple = new Array();
+var paint_simple;
+var canvas_simple;
+var context_simple;
+	var canvasWidth=600,canvasHeight=220;
+/**
+* Creates a canvas element.
+*/
+function prepareSimpleCanvas()
+{
+	// Create the canvas (Neccessary for IE because it doesn't know what a canvas element is)
+
+	var canvasDiv = document.getElementById('canvasSimpleDiv');
+	canvas_simple = document.createElement('canvas');
+	canvas_simple.setAttribute('width', canvasWidth);
+	canvas_simple.setAttribute('height', canvasHeight);
+	canvas_simple.setAttribute('id', 'canvasSimple');
+	canvasDiv.appendChild(canvas_simple);
+	if(typeof G_vmlCanvasManager != 'undefined') {
+		canvas_simple = G_vmlCanvasManager.initElement(canvas_simple);
+	}
+	context_simple = canvas_simple.getContext("2d");
+	
+	// Add mouse events
+	// ----------------
+	$('#canvasSimple').mousedown(function(e){
+		// Mouse down location
+		var mouseX = e.pageX - this.offsetLeft;
+		var mouseY = e.pageY - this.offsetTop;
+		
+		paint_simple = true;
+		addClickSimple(mouseX, mouseY, false);
+		redrawSimple();
+	});
+	
+	$('#canvasSimple').mousemove(function(e){
+		if(paint_simple){
+			addClickSimple(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+			redrawSimple();
+		}
+	});
+	
+	$('#canvasSimple').mouseup(function(e){
+		paint_simple = false;
+	  	redrawSimple();
+	});
+	
+	$('#canvasSimple').mouseleave(function(e){
+		paint_simple = false;
+	});
+	
+	$('#clearCanvasSimple').mousedown(function(e)
+	{
+		clickX_simple = new Array();
+		clickY_simple = new Array();
+		clickDrag_simple = new Array();
+		clearCanvas_simple(); 
+	});
+	$('#doneSignature').mousedown(function(e){
+		if($('#doneSignature').html()=="Done"){
+			$('#img-sign').css('display','block');
+			$('#clearCanvasSimple').css('display','none');
+			$("#doneSignature").html('Redo');
+			$('#canvasSimple').css('display','none');
+			$('#img-sign').attr('src',document.getElementById('canvasSimple').toDataURL());
+		}
+		else{
+			$('#img-sign').css('display','none');
+			$('#clearCanvasSimple').css('display','inline');
+			$("#doneSignature").html('Done');
+			$('#canvasSimple').css('display','block');
+		}
+	});
+}
+
+function addClickSimple(x, y, dragging)
+{
+	clickX_simple.push(x);
+	clickY_simple.push(y);
+	clickDrag_simple.push(dragging);
+}
+
+function clearCanvas_simple()
+{
+	context_simple.clearRect(0, 0, canvasWidth, canvasHeight);
+}
+
+function redrawSimple()
+{
+	clearCanvas_simple();
+	
+	var radius = 7;
+	context_simple.strokeStyle = "#000";
+	context_simple.lineJoin = context_simple.lineCap = 'round';
+	context_simple.shadowBlur = 7;
+	context_simple.shadowColor = '#000';
+	context_simple.lineWidth = radius;
+			
+	for(var i=0; i < clickX_simple.length; i++)
+	{		
+		context_simple.beginPath();
+		if(clickDrag_simple[i] && i){
+			context_simple.moveTo(clickX_simple[i-1], clickY_simple[i-1]);
+		}else{
+			context_simple.moveTo(clickX_simple[i]-1, clickY_simple[i]);
+		}
+		
+		context_simple.lineTo(clickX_simple[i], clickY_simple[i]);
+		context_simple.closePath();
+		context_simple.stroke();
+	}
+}
+prepareSimpleCanvas();
+
+	</script>
+	<script>
+	document.userForm.date.onblur=function(){
+	validatedate(this);
+	}
+	document.userForm.attid.onblur=function(){
+	isAlphaNumeric(this);
+	}
+	document.userForm.username.onblur=function(){
+		isAlpha(this)
+	}
+	
+	function validatedate(inputText)  
+  {
+	var that=inputText;
+	var dateformat = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/;  
+  // Match the date format through regular expression  
+	if(inputText.value.match(dateformat))  
+{  
+
+  //Test which seperator is used '/' or '-'  
+  var opera1 = inputText.value.split('/');  
+  var opera2 = inputText.value.split('-');  
+  lopera1 = opera1.length;  
+  lopera2 = opera2.length;  
+  // Extract the string into month, date and year  
+  if (lopera1>1)  
+  {  
+  var pdate = inputText.value.split('/');  
+  }  
+  else if (lopera2>1)  
+  {  
+  var pdate = inputText.value.split('-');  
+  }  
+  var mm  = parseInt(pdate[0]);  
+  var dd = parseInt(pdate[1]);  
+  var yy = parseInt(pdate[2]);  
+  // Create list of days of a month [assume there is no leap year by default]  
+  var ListofDays = [31,28,31,30,31,30,31,31,30,31,30,31];  
+  if (mm==1 || mm>2)  
+  {  
+  if (dd>ListofDays[mm-1])  
+  {  
+  //alert('Invalid date format!');  
+  jQuery(that).removeClass('valid').addClass('error');
+  return false;  
+  }  
+  }  
+  if (mm==2)  
+  {  
+  var lyear = false;  
+	  if ( (!(yy % 4) && yy % 100) || !(yy % 400))   
+	  {  
+	  lyear = true;  
+	  }  
+	  if ((lyear==false) && (dd>=29))  
+	  {  
+	  //alert('Invalid date format!');  
+	  jQuery(that).removeClass('valid').addClass('error');
+	  return false;  
+	  }  
+	  if ((lyear==true) && (dd>29))  
+	  {  
+	  //alert('Invalid date format!');  
+	  jQuery(that).removeClass('valid').addClass('error');
+	  return false;  
+	  }  
+  }  
+  }  
+  else  
+  {  
+  //alert("Invalid date format!");   
+  jQuery(that).removeClass('valid').addClass('error');
+  return false;  
+  } 
+  jQuery(that).removeClass('error').addClass('valid');
+  return true
+  }  
+  
+  function isAlphaNumeric(that) {
+  var that=that;
+  var str=that.value;
+	var code, i, len,number=false;
+	if(str.length==6){
+	for (i = 0, len = str.length; i < len; i++) {
+		code = str.charCodeAt(i);
+		
+		if(code>47 && code<58)
+		number=true
+
+		if (!(code > 47 && code < 58) && // numeric (0-9)
+			!(code > 64 && code < 91) && // upper alpha (A-Z)
+			!(code > 96 && code < 123)) {		// lower alpha (a-z)
+			//alert("Invalid ATTID")
+			jQuery(that).removeClass('valid').addClass('error');
+			return false;
+		}
+	 }
+	 
+  if(!number){
+	//alert("Invalid ATTID")
+	jQuery(that).removeClass('valid').addClass('error');
+	}
+	jQuery(that).removeClass('error').addClass('valid');
+  return true;
+	}
+	else{
+	//alert("Invalid ATTID");
+	jQuery(that).removeClass('valid').addClass('error');
+	return false;
+	}
+
+};
+ function isAlpha(that) {
+ var that=that;
+ var str=that.value;
+	var code, i, len,alpha=false;
+	if(str.length>0){
+	for (i = 0, len = str.length; i < len; i++) {
+		code = str.charCodeAt(i);
+		if(code > 47 && code < 58){
+			//alert("Invalid Full Name 1");
+			jQuery(that).removeClass('valid').addClass('error');
+			return false;
+		}
+		
+
+		if (!(code > 47 && code < 58) && // numeric (0-9)
+			!(code > 64 && code < 91) && // upper alpha (A-Z)
+			!(code > 96 && code < 123) && !(code==32)) {		// lower alpha (a-z)
+			//alert("Invalid Name 2")
+			jQuery(that).removeClass('valid').addClass('error');
+			return false;
+		}
+	 }
+  jQuery(that).addClass('valid').removeClass('error');
+  return true;
+	}
+else{
+jQuery(that).removeClass('valid').addClass('error');
+//alert("Invalid Full Name")
+return false;
+}
+
+
+ 
+};
+	</script>
+	
+	
+  </body>
+</html>
