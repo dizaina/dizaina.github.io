@@ -4619,4 +4619,42 @@ span.prime{
 }
 .footer-text.copy{
   font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+}
+.item-type {
+  font-size: 10px;
+  padding: 3px 8px;
+  margin-right: 0px;
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  vertical-align: bottom;
+}
+.item-type-G {
+  background-color: #f6c342;
+  color: black;
+}
+.item-type-S {
+  background-color: #4a6785;
+}
+.tallyLogo{
+  display: block;
+  position: relative;
+  z-index: 1;
+  padding-left: 3em;
+  margin-top: -10px;
+}
+.flaggedImage{
+  width: 21px;
+}
+#get_started{
+  width:50%;
+  text-align:center;
+}
+.single-footer-widget img{
+  width:20px;
+  vertical-align: bottom;
+  margin-right: 5px;
 }
