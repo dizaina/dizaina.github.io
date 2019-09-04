@@ -2408,7 +2408,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /*  Homepage Styles
 /* =================================== */
 .section-gap {
-  padding: 0px 0 100px 0;
+  padding: 80px 0;
 }
 
 .alert-msg {
@@ -2540,11 +2540,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 /*-------- Start Banner Area ------------*/
 .banner-area {
-  background: #fff;
+  background: #f8f9fa;
 }
 
 .banner-area .fullscreen {
-  height: 750px !important;
+  height: 665px !important;
 }
 
 .banner-left h6 {
@@ -2556,6 +2556,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 .banner-left h1 {
   margin: 20px 0;
   font-size: 45px;
+  color: #0273d4;
+  text-align: left;
 }
 
 @media (max-width: 991px) {
@@ -4418,7 +4420,7 @@ dl.accordion.time-line:before {
 
 .single-footer-widget h4 {
   color: #fff !important;
-  margin-bottom: 25px;
+  margin: 20px 0 10px 0;
   font-weight: 500;
 }
 
@@ -4584,14 +4586,37 @@ dl.accordion.time-line:before {
 }
 
 /*-------- end footer Area -------------*/
-.customListing li{margin-bottom: 1.4em;}
+.customListing li{margin-bottom: 1.4em;padding-left: 30px;}
 span.prime{
-  font-size: 1.2em;
+  font-size: 1em;
   color: #fa7b17;
-  font-style: italic;
+  font-style: initial;
 }
 #facts-area p{font-size: 1.3em;}
 .footer-area p{
   color: #777;
   margin: 0;
+}
+.heroListing li{margin-bottom: 1em;color: #536e7a;text-align: left;}
+.heroListing li img{
+  width:20px;
+  margin-right:10px;
+}
+.heroListing{
+  margin-bottom:30px;
+}
+.animation{
+  transform: scale(1.1);
+}
+.tickImage{
+  width: 25px;
+  margin-right:10px;
+  position: absolute;
+  left: 11px;
+}
+.imgShadow{
+  box-shadow: 0 13px 33px rgba(0,0,0,0.05), 0 4px 62px rgba(0,0,0,0.02);
+}
+.footer-text.copy{
+  font-size: 12px;
 }
