@@ -1,0 +1,36 @@
+{
+"title":"JavaScript Knowledge Base",
+"data":[
+{"question":"Which of the following is not a valid JavaScript variable name?",
+"options":["2names"," _first_and_last_names","FirstAndLast","$first","None of the above"]
+},
+{"question":"How does JavaScript store dates in a date object?",
+"options":["The number of milliseconds since January 1st, 1970","The number of days since January 1st, 1900","The number of seconds since Netscape's public stock offering.","None of the above"]
+},
+{"question":"What is the correct syntax for referring to an external script called \" abc.js\"?",
+"options":["&lt;script href=\" abc.js\"&gt;","&lt;script name=\" abc.js\"&gt;","&lt;script src=\" abc.js\"&gt;","None of the above"]
+},
+{"question":"What does the &lt;noscript&gt; tag do?",
+"options":["Enclose text to be displayed by non-JavaScript browsers.","Prevents scripts on the page from executing.","Describes certain low-budget movies.","None of the above"]
+},
+{"question":"JavaScript entities start with _______ and end with _________",
+"options":["Semicolon, colon","Semicolon, Ampersand;","Ampersand, colon","Ampersand, semicolon","None of the above"]
+},
+{"question":"The _______ method of an Array object adds and/or removes elements from an array.",
+"options":["Reverse","Shift","Slice","Splice","None of the above"]
+},
+{"question":"(function(x){<br>delete x;<br>return x;<br>})(1)",
+"options":["1","Null","undefined","Error"]
+},
+{"question":"var y = 1, x = y = typeof x;<br> x;",
+"options":["1","Null","undefined","Error"]
+},
+{"question":"The escape sequence \"\\ f\" stands for",
+"options":["Floating numbers","Representation of functions that returns a value","\"\\ f\" is not present in JavaScript","Form feed"]
+},
+{"question":"var a = [];<br>a.unshift(1);<br>a.unshift(22);<br>a.shift();<br>a.unshift(3,[4,5]);<br>a.shift();<br>a.shift();<br>a.shift();",
+"options":["1","[4,5]","[3,4,5]","None of the Above"]
+}
+],
+"answers":[1,1,3,1,3,4,1,3,4,1]
+}

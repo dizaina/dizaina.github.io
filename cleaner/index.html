@@ -1,0 +1,390 @@
+<!doctype html>
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link rel="stylesheet" type="text/css" href="normalize.css">
+	<style>
+	
+		*{box-sizing:border-box}
+		:focus {   outline: -webkit-focus-ring-color auto 0px;}
+		body{font-family:arial;font-size:13px}
+		header{position:relative}
+		header .toolbar{ position: absolute;bottom: 0;right:15px}
+		header .toolbar a {cursor: pointer;margin-left:10px;display:inline-block;text-decoration:none;color: wheat;}
+		header .toolbar a:hover{color:white}
+		button{ text-decoration: none;color: #fff;background-color: #26a69a;text-align: center;letter-spacing: 0.5px; height:36px; line-height:36px;padding: 0 2rem;border: 0px;border-radius: 5px;margin-top:15px}
+		button:hover{background:#000}
+		button:active{background:white;color:#000}
+		section{max-width:900px;margin:0 auto;padding:5% 0;text-align:center}
+		.tabular-row p{border: solid 5px #4db6ac;text-align:left; width:50%;min-height:400px;padding:2rem; color:#07a;background: #f5f2f0;display:table-cell;border-bottom:solid 5px #4db6ac;border-top:solid 5px #4db6ac;word-wrap:break-word}
+		.tabular{display:table;width:100%;table-layout:fixed}
+		.tabular-row{display:table-row;}
+		.hide{display:none !important}
+		#inputText mark{background:#B1B9E2;color:black;}
+		#outputText mark{background:#B1B9E2;color:black;}
+		#inputText figure{background:#E8A3A3;color:black;display:inline;margin:0}
+		#outputText figure{background:#E8A3A3 ;color:black;display:inline;margin:0}
+		#inputJS mark{background:#B1B9E2;color:black;}
+		#outputJS mark{background:#B1B9E2;color:black;}
+		#inputJS figure{background:#E8A3A3;color:black;display:inline;margin:0}
+		#outputJS figure{background:#E8A3A3 ;color:black;display:inline;margin:0}
+		.clearfix:after {visibility: hidden; display: block;font-size: 0;content: " ";clear: both;height: 0;}
+		header{padding:10%;font-size:45px;text-align:center;background:#4db6ac;color:white;font-family: monospace;}
+		.fileBrowse{display:inline-block;width:150px}
+		.fileBrowse a{font-size:17px}
+		#fileread{        position: absolute;     left: -100px;     top: 0px;     opacity: 0;     width: 130px;     cursor: pointer; }
+		.fileDesc{position:absolute;left:10px;bottom:0px;font-size:20px	;z-index:100}
+		.popup{position: fixed;     padding: 50px;     background-color: #6C8C73;     margin-left: 30%;     margin-right: 30%;     width: 40%;    border: solid 5px #7FFF00;border-radius:25px;z-index:1000;text-align:center;top:5%;}
+		.popup label{ color: white;font-size: 16px;}
+		.popup label i{font-size:10px} 
+		.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:0;opacity:0.7}
+		.downloader,.downloader2{    text-decoration: none;     color: white;     background-color: #C7C780;     border: solid thin white;     border-radius: 7px;     padding: 3px;     font-size: 15px;     position: absolute;     right: 7px;     bottom: -53px;}
+	</style>
+	<script src="jquery.min.js"></script>
+	</head>
+	<body>
+
+		<header>Appviewx JSP Cleanup !! <div class="toolbar"><div class="fileBrowse"><a href="javascript:void(0)">Upload JSP</a><input type="file" id="fileread"/></div><a onclick="jspReady()" href="javascript:void(0)">JSP</a><a onclick="jsReady()" href="javascript:void(0)">JS</a><a onclick="prReady()" href="javascript:void(0)">Prop</a></div><div class="fileDesc hide">Desc</div><a class="downloader hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a><a class="downloader2 hide" download="test.jsp" href="data:text/plain;charset=utf-8,test%20contents">Save</a></header>
+		
+		<article class="clearfix">
+			<div class="tabular">
+				<div class="tabular-row">
+					<p contenteditable="true" spellcheck="false" id="inputText"></p>
+					<p contenteditable="true" spellcheck="false" id="outputText"></p>
+					<p contenteditable="true" spellcheck="false" class="hide" id="inputJS"> </p>
+					<p contenteditable="true" spellcheck="false" class="hide" id="outputJS"></p>
+					<p contenteditable="true" spellcheck="false" class="hide" id="properties"></p>
+				</div>
+			</div>
+		</article>
+		<section><button onclick="convertor()">Replace</button></section>
+		<div class="popup hide">
+			<label>Module Name:<i>(Eg.configMigration)</i></label>
+			<input list="modules" id="module" name="module"/>
+			<datalist id="modules">
+				<option value="alert">
+				<option value="application">
+				<option value="backUpRestore">
+				<option value="certificate">
+				<option value="configCreation">
+				<option value="configMigration">
+				<option value="controlCenter">
+				<option value="deviceManagement">
+				<option value="dashboard">
+				<option value="iHealth">
+				<option value="inventoryGroups">
+				<option value="logging">
+				<option value="notificationCenter">
+				<option value="pvConfig">
+				<option value="report">
+				<option value="search">
+				<option value="security">
+				<option value="templates">
+				<option value="accountManagement">
+				<option value="userColumnPreference">
+			</datalist>
+			<button id='go'>Go</button>
+		</div>
+		<div class="overlay hide"></div>
+	</body>
+	<script>
+		var str,iStr,oStr,scriptr,iScriptr,oScriptr,jsName,pVar,convrt,propName="XXXXX",leftStr=[],rightStr=[];		
+		function convertor(){
+		propName=jQuery('#module').val().replace(/Management/,'');
+		str=jQuery('#inputText').html()||"";
+		str=str.replace(/<div>(.+?)<\/div>/g,function(a,b){return b+"<br>"}).replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/<figure>(.+?)<\/figure>/g,'$1').replace(/&gt;\s*&lt;/g,"&gt;&lt;").replace(/&lt;\%@taglib.+prefix=["|']spring["|']\s*%&gt;/g,"<br>");
+		//str=str.replace(/<mark>(.+?)<\/mark>/g,function(a,b){return b});
+		iStr=str.replace(/(&lt;\s*spring.+?=\s*["|']\s*.+?\s*["|']\s*\/&gt;)/igm,'<mark>$1</mark>');/*to highlight spring left Pane*/
+		oStr=str.replace(/&lt;\s*spring.+?=\s*(["|'])\s*(.+?)\s*(["|'])\s*\/&gt;/igm,function(m,b,c,d){return "<mark>${messageContent["+b+c+d+"]}</mark>"});/*to highlight/convert ${message} Right Pane*/
+		
+		/*iStr=iStr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>");
+		iStr=iStr.replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>");
+		iStr=iStr.replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");
+	
+		oStr=oStr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>");
+		oStr=oStr.replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>");
+		oStr=oStr.replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");*/
+		
+		/* code for localization*/		
+		iStr=iStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;?\/(button|label|span|div|a|p)&gt;/g,'&lt;$1$2&gt;<figure>$3</figure>&lt;/$4&gt;');/*To highlight plain HTML*/
+		iStr=iStr.replace(/&gt;((?!\d+)(?!\,)[\w,\s,\',\",\.,(,),\_,\-,\=]+?)(\:)?&lt;/g,'&gt;<figure>$1$2</figure>&lt;');/*for text inside*/
+		
+		oStr=oStr.replace(/&lt;(button|label|span|div|a|p)([\w,\s,\',\",\.,(,),\_,\-,\=]*?)&gt;((?!\d+)[\w,\.,\,,\s,\-]+?)&lt;\/(button|label|span|div|a|p)&gt;/g,function(m,a,b,c,d){
+			c=c.trim();
+			(leftStr.indexOf(c)<0)&& leftStr.push(c);
+			c=c.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\-/," ");
+			(rightStr.indexOf(c)<0)&& rightStr.push(c);
+			c=c.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
+			return "&lt;"+a+b+"&gt;"+"<figure>${pageContent['"+propName+"."+c+"']}</figure>"+"&lt;/"+d+"&gt;";
+		});
+		
+		oStr=oStr.replace(/&gt;((?!\d+)(?!\,)[\w,\s,\',\",\.,(,),\_,\-,\=]+?)(\:)?&lt;/g,function(m,a,b){
+		a=a.trim();
+		(leftStr.indexOf(a)<0)&& leftStr.push(a);
+		debugger;
+		a=a.replace(/\,/g,"").replace(/\./g,"").replace(/\(/,"").replace(/\)/,"").replace(/\-/," ");
+		(rightStr.indexOf(a)<0)&& rightStr.push(a);
+		a=a.toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()})
+		b=b?b:"";
+		return "&gt;<figure>${pageContent['"+propName+"."+a+"']}"+b+"</figure>&lt;"
+		})
+		
+		var leftStr1=leftStr.map(function(v,i){
+		var x=rightStr[i].trim().toLowerCase().replace(/\s+./g,function(m){return m.trim().toUpperCase()});
+		debugger;
+		return propName+"."+x+"="+leftStr[i].trim();
+		});
+		
+		jQuery('#properties').html(leftStr1.join('<br>'));
+		/*end of code for localization*/	
+		if(!(/\/\/breakit/igm).test(oStr))
+		alert("Found No '//breakit' comment inside <script/> tag, so external JS file will not be created")
+		
+		if(!(/prefix="c"/g).test(oStr))
+			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'<mark>&lt;%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %&gt;</mark><br>&lt;appviewx:layoutAjax/&gt;')/*To include appviewx.tld*/
+		
+		if(!(/prefix="fn"/g).test(oStr))
+			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'<mark>&lt;%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %&gt;</mark><br>&lt;appviewx:layoutAjax/&gt;')/*To include prefix=c*/
+		
+		if(!(/contentVar=["|']pageContent["|']/).test(oStr))
+			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'&lt;appviewx:layoutAjax/&gt;<br><mark>&lt;appviewx:localeContent contentVar="pageContent" propFile="content/en/'+propName+'_module_en.properties" /&gt;</mark>');
+		
+		if(!(/contentVar=["|']messageContent["|']/).test(oStr))
+			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'&lt;appviewx:layoutAjax/&gt;<br><mark>&lt;appviewx:localeContent contentVar="messageContent" propFile="MessagesBundle_en.properties"/&gt;</mark>');
+		
+		if(!(/appviewx.tld/g).test(str))
+			oStr=oStr.replace(/&lt;appviewx:layoutAjax\/&gt;/,'<mark>&lt;%@taglib uri="../../tlds/appviewx.tld" prefix="appviewx"%&gt;</mark><br>&lt;appviewx:layoutAjax/&gt;')/*To include prefix=fn*/
+	
+		//var pat=(/&lt;script\s*type="text\/javascript"\s*&gt;/).test(oStr)?(/&lt;script\s*type="text\/javascript"\s*&gt;/):(/&lt;script\s*&gt;/)
+		if((/&lt;\s*script\s*type=["|']text\/javascript['|"]\s*&gt;/).test(oStr)){
+			scriptr=oStr.match(/&lt;script\s*type="text\/javascript"\s*&gt;(.+?)&lt;\/script&gt;/);
+			scriptr=scriptr[scriptr.length-1];
+			
+			if((/breakIt/i).test(scriptr)){
+				scriptr=scriptr.replace(/&lt;\s*script\s*type="text\/javascript"\s*&gt;/,"").replace(/&lt;\s*\/script\s*&gt;/,"");/*to remove script tag*/
+				
+				iScriptr=scriptr.match(/.*\/\/(breakIt)/i)[0].replace(/\/\/breakIt/i,"");/*to split before 'breakIt'*/
+				oScriptr=scriptr.match(/\/\/(breakIt).*/i)[0].replace(/\/\/breakIt/i,"");/*to split after 'breakIt' and remove 'breakit'*/
+				oScriptr=oScriptr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>").replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>").replace(/(&lt;%=.*?%&gt;)/g,"<mark>$1</mark>")
+				
+				jQuery('#inputJS').html(oScriptr);
+				
+				/*to convert all messageContent,pageContent,shiro,dollar to content.obj*/
+				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'messageContent_'+e});
+				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
+				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
+				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
+				var scriptVar=getMatches(oScriptr,/&lt;%=(.+?)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_').replace(/\(\)/,"")});
+				
+				/*to assign messageContent to content.property*/
+				if(jsVar.length>0){
+					var mesVar=oScriptr.match(/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
+					jsVar=jsVar.map(function(v,i){ return v+"="+"\""+mesVar[i]+"\""});
+					jsVar=jsVar.filter(function(item, pos) {return jsVar.indexOf(item) == pos;});
+					jsVar="<br>var "+jsVar.join(";<br>var ")+";";
+				}
+				if(jsPageVar.length>0){
+					var mesVar1=oScriptr.match(/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
+					jsPageVar=jsPageVar.map(function(v,i){ return v+"="+"\""+mesVar1[i]+"\""});
+					jsPageVar=jsPageVar.filter(function(item, pos) {return jsPageVar.indexOf(item) == pos;});
+					jsPageVar="<br>var "+jsPageVar.join(";<br>var ")+";";
+				}
+				if(dollarVar.length>0){
+					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
+					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
+					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
+					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
+					dollarVar="<br>var "+dollarVar.join(";<br>var ")+";";
+				}
+				if(shiroVar.length>0){
+					var mesVar3=oScriptr.match(/&lt;shiro:(\w+)\s*.*?\/&gt;/g);
+					shiroVar=shiroVar.map(function(v,i){ return v+"="+"\""+mesVar3[i]+"\""});
+					shiroVar=shiroVar.filter(function(item, pos) {return shiroVar.indexOf(item) == pos;});
+					shiroVar="<br>var "+shiroVar.join(";<br>var ")+";";
+				}
+				if(scriptVar.length>0){
+								var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
+					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
+					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
+					scriptVar="<br>var "+scriptVar.join(";<br>var ")+";";
+				}
+				/*to convert messageContent to messageContent_ inside script*/
+				oScriptr=oScriptr.replace(/['|"]?\s*<mark>\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/mark>['|"]?/g,function(a,b){
+				b=b.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,"_");
+				return '<mark>'+'messageContent_'+b+'</mark>'
+				})
+				
+				/*to convert pageContent  to pageContent_   inside script*/
+				oScriptr=oScriptr.replace(/['|"]?\s*<figure>\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/figure>['|"]?/g,function(a,b){
+				b=b.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,"_");
+				return '<figure>'+'\'+'+'pageContent_'+b+'+\''+'</figure>'
+				})
+				
+				/*to convert scriplet inside script*/
+				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%=(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'+\"</mark>'});;
+				
+				/*to convert dollar inside script*/
+				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
+				
+				/*to convert shiro inside script*/
+				oScriptr=oScriptr.replace(/['|"]?<mark>&lt;shiro:(\w+)\s*.*?\/&gt;<\/mark>['|"]?/g,function(m,a){return "<mark>shiro_"+a+"</mark>"});
+				
+				jQuery('#outputJS').html(oScriptr);
+				
+				/*to convert oScriptr to save-able JS file */
+				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&nbsp;/g," ").replace(/&amp;/g,"&");
+				jQuery('.downloader2').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt1),download:jsName+'.txt'});
+				
+				jsName=jsName.replace(/[.]jsp/i,"")||prompt("Enter JS Name");
+				jsName=jsName.replace(/[.]js/i,"");
+				propName=propName.replace(/device/ig,"dm").replace(/account/ig,"um")
+				oStr=oStr.replace(/&lt;script\s*type="text\/javascript"\s*&gt;(.+?)&lt;\/script&gt;/,"<mark>&lt;script&gt;"+iScriptr+jsVar+"<br>"+jsPageVar+"<br>"+dollarVar+"<br>"+shiroVar+"<br>"+scriptVar+"&lt;/script&gt;</mark><br><mark>&lt;script type='text/javascript' src='resources/script/"+propName+"/"+jsName+".js'&gt;&lt;/script&gt;</mark>");
+			}
+		}
+		else if((/&lt;\s*script\s*&gt;/).test(oStr)){
+			scriptr=oStr.match(/&lt;\s*script\s*&gt;(.+?)&lt;\/script&gt;/);
+			scriptr=scriptr[scriptr.length-1];
+			if((/breakIt/i).test(scriptr)){
+				scriptr=scriptr.replace(/&lt;\s*script\s*&gt;/,"").replace(/&lt;\s*\/script\s*&gt;/,"");/*to remove script tag*/
+								
+				iScriptr=scriptr.match(/.*\/\/(breakIt)/i)[0].replace(/\/\/breakIt/i,"");/*to split before 'breakIt'*/
+				oScriptr=scriptr.match(/\/\/(breakIt).*/i)[0].replace(/\/\/breakIt/i,"");/*to split after 'breakIt' and remove 'breakit'*/
+				oScriptr=oScriptr.replace(/(\$\{(?!message)(?!page).*?})/g,"<mark>$1</mark>").replace(/(&lt;shiro:.*?\/&gt;)/g,"<mark>$1</mark>").replace(/(&lt;%.*?%&gt;)/g,"<mark>$1</mark>");
+				jQuery('#inputJS').html(oScriptr);
+				
+				/*to convert all messageContent,pageContent,shiro,dollar to content.obj*/
+				var jsVar=getMatches(oScriptr,/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'messageContent_'+e});
+				var jsPageVar=getMatches(oScriptr,/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g,1).map(function(e,v){e=e.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,'_');return 'pageContent_'+e});
+				var dollarVar=getMatches(oScriptr,/\$\{((?!message)(?!page).*?)}/ig,1);
+				var shiroVar=getMatches(oScriptr,/&lt;shiro:(\w+)\s*.*?\/&gt;/g,1).map(function(v,i){ return "shiro_"+v});
+				var scriptVar=getMatches(oScriptr,/&lt;%=(.+?)%&gt;/g,1).map(function(v,i){ return v.replace(/\./g,'_').replace(/\(\)/,"")});
+				
+				/*to assign messageContent to content.property*/
+				if(jsVar.length>0){
+					var mesVar=oScriptr.match(/\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
+					jsVar=jsVar.map(function(v,i){ return v+"="+"\""+mesVar[i]+"\""});
+					jsVar=jsVar.filter(function(item, pos) {return jsVar.indexOf(item) == pos;});
+					jsVar="<br>var "+jsVar.join(";<br>var ")+";";
+				}
+				if(jsPageVar.length>0){
+					var mesVar1=oScriptr.match(/\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}/g);
+					jsPageVar=jsPageVar.map(function(v,i){ return v+"="+"\""+mesVar1[i]+"\""});
+					jsPageVar=jsPageVar.filter(function(item, pos) {return jsPageVar.indexOf(item) == pos;});
+					jsPageVar="<br>var "+jsPageVar.join(";<br>var ")+";";
+				}
+				if(dollarVar.length>0){
+					dollarVar=dollarVar.map(function(e,v){e=e.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()}); return "dollar_"+e;});
+					var mesVar2=oScriptr.match(/\$\{((?!message)(?!page).*?)}/g);
+					dollarVar=dollarVar.map(function(v,i){ return v+"="+"\""+mesVar2[i]+"\""});
+					dollarVar=dollarVar.filter(function(item, pos) {return dollarVar.indexOf(item) == pos;});
+					dollarVar="<br>var "+dollarVar.join(";<br>var ")+";";
+				}
+				if(shiroVar.length>0){
+					var mesVar3=oScriptr.match(/&lt;shiro:(\w+)\s*.*?\/&gt;/g);
+					shiroVar=shiroVar.map(function(v,i){ return v+"="+"\""+mesVar3[i]+"\""});
+					shiroVar=shiroVar.filter(function(item, pos) {return shiroVar.indexOf(item) == pos;});
+					shiroVar="<br>var "+shiroVar.join(";<br>var ")+";";
+				}
+				if(scriptVar.length>0){
+								var mesVar4=oScriptr.match(/&lt;%=(.*?)%&gt;/g);
+					scriptVar=scriptVar.map(function(v,i){ return v+"="+"\""+mesVar4[i]+"\""});
+					scriptVar=scriptVar.filter(function(item, pos) {return scriptVar.indexOf(item) == pos;});
+					scriptVar="<br>var "+scriptVar.join(";<br>var ")+";";
+				}
+				/*to convert messageContent to messageContent_ inside script*/
+				oScriptr=oScriptr.replace(/['|"]?\s*<mark>\$\{messageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/mark>['|"]?/g,function(a,b){
+				b=b.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,"_");
+				return '<mark>'+'messageContent_'+b+'</mark>'
+				})
+				
+				/*to convert pageContent  to pageContent_   inside script*/
+				oScriptr=oScriptr.replace(/['|"]?\s*<figure>\$\{pageContent\s*\[\s*['|"]\s*(.+?)\s*['|"]\s*\]\}<\/figure>['|"]?/g,function(a,b){
+				b=b.replace(/delete/i,'deleteItem').replace(/update/i,'updateItem').replace(/modify/i,'modifyItem').replace(/\./g,"_");
+				return '<figure>'+'\'+'+'pageContent_'+b+'+\''+'</figure>'
+				})
+				
+				/*to convert scriplet inside script*/
+				oScriptr=oScriptr.replace(/["|']?<mark>&lt;%=(.*?)%&gt;<\/mark>["|']?/g,function(m,a){return '<mark>'+a.replace(/\./g,'_').replace(/\(\)/g,'')+'+\"</mark>'});;
+				
+				/*to convert dollar inside script*/
+				oScriptr=oScriptr.replace(/['|"]?<mark>\$\{((?!message)|(?!page).*?)}<\/mark>['|"]?/g,function(m,a){return "<mark>dollar_"+a.replace(/\./g,"_").replace(/\s(.)/g,function(m,a){ return a.toUpperCase()})+"</mark>"})
+				
+				/*to convert shiro inside script*/
+				oScriptr=oScriptr.replace(/['|"]?<mark>&lt;shiro:(\w+)\s*.*?\/&gt;<\/mark>['|"]?/g,function(m,a){return "<mark>shiro_"+a+"</mark>"});
+				
+				jQuery('#outputJS').html(oScriptr);
+				
+				/*to convert oScriptr to save-able JS file */
+				var convrt1=oScriptr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&amp;/g,"&");;
+				jQuery('.downloader2').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt1),download:jsName+'.txt'});
+				
+				jsName=jsName.replace(/[.]jsp/i,"")||prompt("Enter JS Name");
+				jsName=jsName.replace(/[.]js/i,"");
+				propName=propName.replace(/device/ig,"dm").replace(/account/ig,"um")
+				oStr=oStr.replace(/&lt;script&gt;(.+?)&lt;\/script&gt;/,"<mark>&lt;script&gt;"+iScriptr+jsVar+"<br>"+jsPageVar+"<br>"+dollarVar+"<br>"+shiroVar+"<br>"+scriptVar+"&lt;/script&gt;</mark><br><mark>&lt;script type='text/javascript' src='resources/script/"+propName+"/"+jsName+".js'&gt;&lt;/script&gt;</mark>");
+			}
+		}
+		
+		jQuery('#inputText').html(iStr);
+		convrt=oStr.replace(/<mark>(.+?)<\/mark>/g,'$1').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<br>/g,"\n").replace(/&nbsp;/g," ").replace(/&amp;/g,"&");
+		//debugger
+		jQuery('.downloader').attr({href:'data:text/plain;charset=utf-8,'+encodeURIComponent(convrt),download:jsName+'.jsp'});
+		jQuery('#outputText').html(oStr);
+		jQuery('.downloader').removeClass('hide');
+		}
+function jspReady(){
+	jQuery('.tabular-row p').addClass('hide');
+	jQuery('.downloader2').addClass('hide');
+	jQuery('#inputText,#outputText,.downloader').removeClass('hide');
+}
+function jsReady(){
+	jQuery('.downloader').addClass('hide');
+	jQuery('.tabular-row p').addClass('hide');
+	jQuery('#inputJS,#outputJS,.downloader2').removeClass('hide');
+}
+function prReady(){
+	jQuery('.downloader').addClass('hide');
+	jQuery('.downloader2').addClass('hide');
+	jQuery('.tabular-row p').addClass('hide');
+	jQuery('#properties').removeClass('hide');
+}
+function getMatches(string, regex, index) {
+  index || (index = 1); // default to the first capturing group
+  var matches = [];
+  var match;
+  while (match = regex.exec(string)) {
+    matches.push(match[index]);
+  }
+  return matches;
+}
+  function readSingleFile(evt) {
+    var f = evt.target.files[0]; 
+    if (f) {
+      var r = new FileReader();
+      r.onload = function(e) { 
+	      var contents = e.target.result;
+		  contents=contents.replace(/\&/g,'&amp;').replace(/\</g,'&lt;').replace(/\>/g,'&gt;').replace(/[\r]/g,'').replace(/[\n]/g,'<br>')
+		  jQuery('#inputText').html(contents);
+		
+		  jQuery('.fileDesc').html('Got the file <b>'+f.name+'</b> of size <b>'+(f.size/1024).toFixed(2)+'KB </b>').removeClass('hide');
+		  jsName=f.name.replace(/[.]jsp/i,"");
+		  jQuery('.popup,.overlay').removeClass('hide');
+		  jQuery('body').css('position','fixed');
+		  jQuery('#go').unbind('click').bind('click',function(){jQuery('.popup,.overlay').addClass('hide');jQuery('body').css('position','static');});
+		  // f.name  f.type  f.size + " bytesn"
+         
+      }
+      r.readAsText(f);
+    } else { 
+      alert("Failed to load file");
+    }
+  }
+  jQuery(document).keydown(function (e) {
+  if (e.ctrlKey && e.keyCode == 13) {
+    convertor();
+  }
+});
+document.getElementById('fileread').addEventListener('change', readSingleFile, false);
+
+	</script>
+</html>

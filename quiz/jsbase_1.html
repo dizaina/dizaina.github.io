@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html ng-app='quiz'>
+<head>
+<script src="jquery-1.11.3.js"></script>
+<script src="angular.js"></script>
+<script src="angular-sanitize.js"></script>
+<link href='normalize.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+<style> 
+body{
+font-family: 'Quicksand', sans-serif;
+background:#F7F7F7;
+}
+h3 a{
+display:inline-block;
+}
+.qtn p a{
+display:inline-block;
+}
+span#qstn {
+    position: absolute;
+    left:0;
+    top:0;
+    color: white;
+	-webkit-animation: qstn 2s infinite alternate;
+    animation: qstn 2s infinite alternate;
+}
+span#ans{
+    position: absolute;
+    right:0;
+    bottom: 0;
+    color: white;
+	-webkit-animation: ans 2s infinite alternate;
+    animation: ans 2s infinite alternate;
+}
+
+span#pth{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+	z-index:1000;
+    font-size: 100px;
+	color: white;
+	-webkit-animation:pth 5s infinite alternate;
+	animation:pth 5s infinite alternate;
+}
+img{
+    width: 100%;
+    opacity: 0.2;
+    position: absolute;
+    left: 0px;
+}
+img#backy{
+	-webkit-animation: backy 5s infinite alternate;
+    animation: backy 5s infinite alternate;
+}
+img#backy_1{
+	-webkit-animation: backy_1 3s infinite alternate;
+    animation: backy_1 3s infinite alternate;
+}
+img#backy_2{
+	-webkit-animation: backy_2 2s infinite alternate;
+    animation: backy_2 2s infinite alternate;
+}
+img#backy_4{
+	opacity:0;
+	-webkit-animation: backy_4 3s infinite alternate;
+    animation: backy_4 3s infinite alternate;
+}
+.qtn{
+box-shadow:0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+padding:10px 0;
+margin:40px 0;
+background-color: #EDF2F5;
+color:#757575;
+animation:qtn 1s infinite alternate ;
+}
+.qtn h3{padding-left:10%;padding-right:25%}
+.qtn p{
+padding:1% 25% 1% 10%;
+padding-right:25%;
+background:#F7F7F7;
+transition:all linear 0.5s;
+cursor:pointer;
+}
+.qtn p span{
+width:10px;
+height:10px;
+border-radius:10px;
+border:solid thin #848181;
+background:transparent;
+display:inline-block;
+margin-right:10px;
+transition:all linear 0.4s;
+}
+.qtn p.selected span{
+width:20px;
+}
+
+.qtn p:hover{
+background:#DBDDE0;
+}
+.qtn p.selected{
+background:#A4E1FF;
+}
+.original{
+background:#9FF79F !important;
+}
+.wronger{
+background:#F9BDBD !important;
+}
+header{
+background: #40c4ff;
+width: 100%;
+height: 400px;  
+position: relative;  
+overflow:hidden;
+box-shadow:0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+#checkanswer{
+text-align:center;
+margin-bottom:40px;
+}
+#footer{
+padding:20px 10px;
+background:#3596F5;
+height:20px;
+position:relative;
+overflow:hidden;
+box-shadow:0 0 4px rgba(0,0,0,.14),0 -4px 8px rgba(0,0,0,.28);
+}
+#footer span{
+z-index:1000;
+position:relative;
+font-size:10px;
+color:#ccc;
+}
+#footer span a {
+text-decoration: none;
+color: white;
+font-size: 13px;
+transition:all linear 0.5s;
+}
+#footer span a:hover {
+text-decoration: none;
+color: white;
+font-size: 15px;
+text-decoration:underline;
+}
+#checkanswer button{
+    background:transparent;
+    color: #515151;
+    border: solid 1px #515151;
+    padding: 10px 30px;
+    border-radius: 25px;
+    text-align: center;
+    width: 245px;
+    transition:all linear 0.3s;
+} 
+#checkanswer button:hover{
+    background: #515151;
+    color: white;
+    border: 0px;
+    border: solid 1px #515151;
+    border-radius: 20px;
+    padding: 10px 30px;
+    text-align: center;
+    width: 200px;
+} 
+section{
+position:relative;
+}
+#digiClock{
+right:0px;
+bottom:0px;
+padding:10px;
+font-size:20px;
+position:fixed;
+animation: digi 1s infinite;
+z-index:2000;
+background:#ccc;
+min-width:25px;
+text-align:center;
+display:inline-block;
+}
+.titler{
+text-align:center;
+color:#777777;
+}
+#percent{
+    padding: 10px;
+    font-size: 30px;
+    background: #FFD353;
+    text-align: center;
+    animation:percent 1s infinite alternate;
+ }
+@keyframes qstn {
+    to {font-size:100px;opacity:0;left:500px;}
+}
+@keyframes ans {
+    to {font-size: 100px;opacity:0;right:500px;}
+}
+@keyframes backy {
+    to {transform:scale(2);}
+}
+@keyframes backy_1 {
+    to {transform:scale(2);}
+}
+@keyframes backy_4 {
+    to {opacity:0.2;-webkit-filter:contrast(2);left:70px;transform:scale(1.5)}
+}
+@keyframes pth {
+    to {transform:scale(1.2);}
+}
+
+@keyframes qtn2 {
+    to {box-shadow:0 0 4px rgba(0,0,0,.14),0 14px 38px rgba(0,0,0,.28)}
+}
+@keyframes digi {
+    to {tranform:scaleX(2);opacity:0;}
+}
+@keyframes percent {
+    to {background:#A8F753;}
+}
+</style>
+</head>
+<body scroller ng-controller="dataControl">
+
+<header ng-show='show' style="display:nne">
+    <span id="qstn">Knowledge</span>
+    <span id='ans'>Sharing</span>
+    <span id="pth">{{dizaina}}</span>
+    <img id='backy' src="images.jpg"/>
+    <img id='backy_1' src="images_1.jpg"/>
+	<img id='backy_4' src="images_4.jpg"/>
+</header> 
+<section ng-show='show' >
+<!--span digiclock id='digiClock'>1</span-->
+<h1 class='titler'>{{titler}}</h1>
+<div ng-repeat="dt in data" class="qtn">
+	<h3><a ng-bind-html="dt.question"></a></h3>
+	<p ng-repeat="opt in dt.options" ng-class="{selected:$index==dt.selected,wronger:dt.ans&&$index==dt.selected && dt.ans-1!=dt.selected,original:$index==dt.ans-1}" ng-click="dt.selected=$index"><span></span><a ng-bind-html="opt"></a></p>
+</div>
+<!-- <div>{{data|json}}</div>
+<div>{{answers|json}}</div> -->
+<div  id='checkanswer'><button canceltime ng-click="confdata()">Check Answers</button></div>
+<div ng-show='showpercent' id='percent'>{{percent}}</div>
+</section>
+<div ng-show='show' id='footer'>
+<span class='power'>Powered by <a href='#'>Dizaina </a></span>
+<img id='backy_1' src="images_1.jpg"/>
+</div>
+
+<script>
+var zuizApp=angular.module('quiz', ['ngSanitize']);
+var timer;
+
+zuizApp.controller('dataControl',["$scope","$http","$interval",function($scope,$http,$interval){
+	$scope.righter=0;
+	$scope.confdata=function(){
+		$interval.cancel(timer);
+		for(var i=0;i<$scope.data.length;i++){
+			$scope.data[i]["ans"]=$scope.answers[i];
+			//debugger;
+			if(($scope.data[i]["ans"]-1)==$scope.data[i]["selected"])
+				$scope.righter++;
+		}
+		$scope.showpercent=true;
+		$scope.percent=$scope.righter+'/'+$scope.data.length;
+	}
+	$http.get('jsquiz.json').then(function(response){
+	$scope.data=response.data.data;
+	$scope.titler=response.data.title;
+	$scope.answers=response.data.answers;
+	$scope.show=true;
+	$scope.dizaina=response.data.dizaina||"Puthir";
+	},function(){});
+}])
+
+zuizApp.directive('digiclock',["$interval","$http",function($interval,$http){
+	return{
+		link:function(scope,elem,attr){
+			var x=0;
+			timer=$interval(function(){elem.html((x++)+'s')},1000);
+		}
+	}
+}]);
+
+</script>
+</body>
+</html>
