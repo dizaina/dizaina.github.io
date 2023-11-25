@@ -65,11 +65,12 @@
 	var carousel = function() {
 		$('.carousel-testimony').owlCarousel({
 			center: true,
-			loop: false,
+			loop: true,
 			items:1,
 			margin: 30,
 			stagePadding: 0,
 			nav: false,
+			autoplay:true,
 			navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
 			responsive:{
 				0:{
@@ -356,6 +357,10 @@ TxtRotate.prototype.tick = function() {
   }, delta);
 };
 
+function colorChange(){
+	alert(this.value)
+}
+
 window.onload = function() {
   var elements = document.getElementsByClassName('txt-rotate');
   for (var i=0; i<elements.length; i++) {
@@ -365,6 +370,28 @@ window.onload = function() {
       new TxtRotate(elements[i], JSON.parse(toRotate), period);
     }
   }
+  $('#ftco-nav .nav-item').click(function(event){
+	event.stopImmediatePropagation();
+	event.preventDefault();
+	var offset = 0; //Offset of 20px
+	$('#ftco-nav .nav-item').removeClass('active')
+	$(this).addClass('active')
+    $('html, body').animate({
+        scrollTop: $('#'+this.id+'Details').offset().top + offset
+    }, 2000);
+  });
+
+  $('.simple_color').on('change',function(event){
+	event.stopImmediatePropagation();
+	event.preventDefault();
+	const root = document.documentElement;
+	root.style.setProperty('--alfasa', $(this).val());
+  })
+  
+  $('.simple_color').simpleColor();
+  const root = document.documentElement;
+  root.style.setProperty('--alfasa', $('.simple_color').val());
+
 };
 
 })(jQuery);
