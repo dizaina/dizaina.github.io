@@ -386,11 +386,12 @@ window.onload = function() {
 	event.preventDefault();
 	const root = document.documentElement;
 	root.style.setProperty('--alfasa', $(this).val());
+	localStorage.setItem('alfasa',$(this).val());
   })
   
   $('.simple_color').simpleColor();
   const root = document.documentElement;
-  root.style.setProperty('--alfasa', $('.simple_color').val());
+  root.style.setProperty('--alfasa', localStorage.getItem('alfasa'));
 
 };
 
